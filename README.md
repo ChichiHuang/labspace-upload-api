@@ -24,7 +24,7 @@ STEP.2
 
 到config/app.php 的providers加上
 
-Labspace\UploadApi\AuthApiServiceProvider::class,
+Labspace\UploadApi\UploadApiServiceProvider::class,
 
 ============
 
