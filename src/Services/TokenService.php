@@ -18,22 +18,7 @@ class TokenService {
     static public function getUserId(Request $request)
     {
         try {
-            $auth_token = null;
-            if(!$request->header('token')){
-                if($request->input('token') != ''){
-                    $auth_token = $request->input('token');
-                }
-                
-            } else {
-                if($request->header('token') != ''){
-                   $auth_token = $request->header('token');
-                }
-                
-            }
-            if(!$auth_token){
-                return 0;
-            }
-            $user = JWTAuth::toUser($auth_token); 
+            $user = auth()->user();
             return $user->id;
 
         } catch (Exception $e) {

@@ -9,12 +9,12 @@ Route::group(['prefix' => 'lab/api/upload','middleware' => ['cors']],function ()
     Route::post('/image/ckeditor-json', 'Labspace\UploadApi\Controllers\ImageController@ckeditorJson'); 
     Route::post('/video/ckeditor-json', 'Labspace\UploadApi\Controllers\VideoController@ckeditorJson'); 
 
-    Route::group(['middleware' => ['jwt:member']], function() {
+    //Route::group(['middleware' => ['jwt:member']], function() {
         Route::post('/image/base64', 'Labspace\UploadApi\Controllers\ImageController@base64Source'); 
         Route::post('/image/file', 'Labspace\UploadApi\Controllers\ImageController@fileSource'); 
         
         Route::post('/video/file', 'Labspace\UploadApi\Controllers\VideoController@fileSource'); 
-    });
+    //});
 
 
 });

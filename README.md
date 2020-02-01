@@ -4,7 +4,7 @@
 
 STEP.0 
 
-圖片處理intevention先安裝設定好、jwt機制要ready~
+圖片處理intevention先安裝設定好、jwt機制要ready~ cors也要準備好
 
 http://image.intervention.io/
 
