@@ -29,7 +29,7 @@ class ErrorService {
                 'err_code' => 'DATA_NOT_FOUND',
                 'err_msg' => '資料不存在',
                 'err_detail' =>  null
-            ],404);
+            ]);
         }
 
         //500
@@ -55,7 +55,7 @@ class ErrorService {
                 'err_code' => $err_code ,
                 'err_msg' =>  $msg_arr[0],
                 'err_detail' => null
-            ],403);
+            ]);
 
         }
 
