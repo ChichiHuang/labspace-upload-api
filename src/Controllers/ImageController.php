@@ -83,12 +83,8 @@ class ImageController extends Controller
     public function ckeditor(Request $request)
     {
         try{
-            if(!$request->has('id')){
-                $id = 0;
-            } else {
-                $id = $request->id;
-            }
-            $path = '/ckeditor/'.$id.'/';
+            $user_id = TokenService::getUserId($request);
+            $path = '/ckeditor/'.$user_id.'/';
             $image_source = new FileSource($request,null,'upload');  
             $manager = new ImageUpload($image_source);
             $manager->setImageInfo(800,$path);
@@ -120,12 +116,8 @@ class ImageController extends Controller
             } 
 
 
-            if(!$request->has('id')){
-                $id = 0;
-            } else {
-                $id = $request->id;
-            }
-            $path = '/ckeditor/'.$id.'/';
+            $user_id = TokenService::getUserId($request);
+            $path = '/ckeditor/'.$user_id.'/';
             $image_source = new FileSource($request,null,'upload');  
             $manager = new ImageUpload($image_source);
             $manager->setImageInfo(800,$path);
