@@ -16,6 +16,7 @@ use Labspace\UploadApi\Requests\ImageFileRequest;
 use Labspace\UploadApi\Requests\ImageCkeditorRequest;
 use Input;
 use Labspace\UploadApi\Services\TokenService;
+use Labspace\UploadApi\Models\TempFile;
 
 class ImageController extends Controller
 {
@@ -34,6 +35,7 @@ class ImageController extends Controller
             $manager = new ImageUpload($image_source);
             $manager->setImageInfo(700,$path);
             $filepath =  $manager->saveImage();
+            TempFile::create(['filepath' => $filepath]);
             return response()->json([
                 'status' => true,
                 'data'=> [
@@ -61,6 +63,7 @@ class ImageController extends Controller
             $manager = new ImageUpload($image_source);
             $manager->setImageInfo($request->width,$path);
             $filepath =  $manager->saveImage();
+            TempFile::create(['filepath' => $filepath]);
             return response()->json([
                 'status' => true,
                 'data'=> [

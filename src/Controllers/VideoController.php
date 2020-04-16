@@ -32,6 +32,7 @@ class VideoController extends Controller
             $manager = new VideoUpload($source);
             $manager->setFileInfo($path);
             $filepath =  $manager->saveFile();
+            TempFile::create(['filepath' => $filepath]);
             return response()->json([
                 'status' => true,
                 'data'=> [

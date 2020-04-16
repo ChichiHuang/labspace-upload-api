@@ -22,6 +22,10 @@ class UploadApiServiceProvider extends ServiceProvider
             __DIR__.'/../config/labspace-upload-api.php' => config_path('labspace-upload-api.php')
         ], 'config');
 
+        //新增migration
+        $this->publishes([
+            __DIR__.'/../migration/2019_05_29_002100_create_temp_files_table.php' => database_path('migrations/2019_05_29_002100_create_temp_files_table.php')
+        ], 'migration-temp');
 
 
 
