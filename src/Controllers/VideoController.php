@@ -13,6 +13,7 @@ use Labspace\UploadApi\Services\Video\FileSource;
 use Labspace\UploadApi\Requests\VideoFileRequest;
 use Labspace\UploadApi\Requests\VideoCkeditorRequest;
 use Labspace\UploadApi\Services\TokenService;
+use Labspace\UploadApi\Models\TempFile;
 
 class VideoController extends Controller
 {

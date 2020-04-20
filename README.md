@@ -70,6 +70,15 @@ php artisan vendor:publish --tag=config
  labspace-upload-api.php
  裡面可以設定登入user model的位置
 
+============
+
+STEP.5
+
+migration新增
+
+php artisan vendor:publish --tag=migration-temp
+
+
 
 ====================
 
