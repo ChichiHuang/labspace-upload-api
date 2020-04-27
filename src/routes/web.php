@@ -16,6 +16,15 @@ Route::group(['prefix' => 'lab/api/upload','middleware' => ['cors']],function ()
         Route::post('/video/file', 'Labspace\UploadApi\Controllers\VideoController@fileSource'); 
     //});
 
+    Route::group(['prefix' => 'file-manager','middleware' => ['jwt']], function() {
+        Route::get('/', 'Labspace\UploadApi\Controllers\FileManagerController@index'); 
+        Route::post('/file', 'Labspace\UploadApi\Controllers\FileManagerController@fileUpload'); 
+        Route::delete('/file', 'Labspace\UploadApi\Controllers\FileManagerController@deleteFile'); 
+        Route::post('/folder', 'Labspace\UploadApi\Controllers\FileManagerController@createFolder'); 
+        Route::delete('/folder', 'Labspace\UploadApi\Controllers\FileManagerController@deleteFolder'); 
+
+    });
+
 
 });
 ?>

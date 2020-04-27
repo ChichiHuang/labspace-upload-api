@@ -139,3 +139,86 @@ http://[server_url]/lab/api/upload/video/file
     },
     "success_code": "SUCCESS"
 }
+
+
+
+====================
+
+
+[檔案管理器]
+filesystems.php 要新增檔案管理器file-upload儲存位置
+
+'file-upload' => [
+    'driver' => 'local',
+    'root' =>storage_path('app/public/manager'),
+],
+
+
+==========
+
+helper.php要有以下function
+
+//刪除特殊符號
+function clean_file_name($filename){
+
+    $bad = array(
+
+    "<!--",
+
+    "-->",
+
+    "'",
+
+    "<",
+
+    ">",
+
+    '"',
+
+    '&',
+
+    '$',
+
+    '=',
+
+    ';',
+    ':',
+    '@',
+
+    '?',
+
+    '/'
+
+    );
+
+
+
+    $filename = str_replace($bad, '', $filename);
+
+
+
+    return stripslashes($filename);
+
+}
+
+/**
+* 取得縮圖
+*@param path 字串
+*@return string
+**/
+function get_thumbnail($path){
+
+  $arr = explode("/",$path);
+
+  $filename = end($arr);
+
+  $new_path = '';
+  foreach($arr as $key=> $item){
+    if($key == (count($arr) -1 )){
+      $new_path .= 'thumbs/'.$filename;
+    } else {
+      $new_path .= $item.'/';
+    }
+  }
+  return $new_path;
+}

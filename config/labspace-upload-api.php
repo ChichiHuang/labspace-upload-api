@@ -26,4 +26,15 @@ return [
 
     'thumbnail_width' => 200,
 
+    'valid_mime'   => [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'svg',
+        'mp4'
+    ],
+
+    'upload_url' => env('UPLOAD_URL'),
+
 ];
