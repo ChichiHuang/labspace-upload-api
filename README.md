@@ -146,6 +146,7 @@ http://[server_url]/lab/api/upload/video/file
 
 
 [檔案管理器]
+
 filesystems.php 要新增檔案管理器file-upload儲存位置
 
 'file-upload' => [

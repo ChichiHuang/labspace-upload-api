@@ -47,7 +47,7 @@ class FileManagerController extends Controller
       $type = $request->type;
     }
 
-    $arr = $this->manager->folderInfo($folder,$folder_prefix='manager/'.$user->id,$request->path);
+    $arr = $this->manager->folderInfo($folder,$folder_prefix='manager/'.$path ,$request->path);
 
     $data = $arr;
 
