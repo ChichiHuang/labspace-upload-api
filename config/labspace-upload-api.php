@@ -25,7 +25,7 @@ return [
     ], //開放的檔案上傳的檔案類型(逗號隔開)
 
     'thumbnail_width' => 200,
-
+    //圖片影片
     'valid_mime'   => [
         'jpg',
         'jpeg',
@@ -33,6 +33,23 @@ return [
         'gif',
         'svg',
         'mp4'
+    ],
+    //多格式檔案直接上傳類型
+    'file_valid_mime' => [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'svg',
+        'mp4',
+        'doc',
+        'pdf',
+        'docx',
+        'xls',
+        'xlsx',
+        'txt',
+        'zip'
+
     ],
 
     'upload_url' => env('UPLOAD_URL'),

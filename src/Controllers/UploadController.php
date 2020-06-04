@@ -10,18 +10,25 @@ use DB;
 use Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
-use Labspace\AuthApi\Services\ErrorService;
+use Labspace\UploadApi\Services\TokenService;
 use File;
+use Labspace\UploadApi\Models\TempFile;
+use Illuminate\Support\Facades\Input;
+use Labspace\UploadApi\Requests\FileUploadRequest;
+use Labspace\UploadApi\Services\ErrorService;
+use Labspace\UploadApi\Exceptions\FileTypeInvalidException;
+use Labspace\UploadApi\Services\FileManager\AdminManager;
 
 class UploadController extends Controller
 {
 
 
-    public function __construct(
+    protected $manager;
 
-    ) {
-
-    }
+      public function __construct(AdminManager $manager)
+      {
+         $this->manager = $manager;
+      }
 
     //ckeditor檔案上傳
     public function ckeditorJson(Request $request)
@@ -62,6 +69,58 @@ class UploadController extends Controller
         
         
     }
+
+
+    /**
+   * Upload new file
+   */
+  public function fileUpload(Request $request)
+  {
+
+
+    try{
+       $user_id = TokenService::getUserId($request);
+        $path = '/files/'.$user_id.'/';
+        $file= Input::file('file');
+
+        $valid_mime_arr = config('labspace-upload-api.file_valid_mime');
+        $mimes = '';
+        foreach ($valid_mime_arr as  $valid_mime) {
+           $mimes= $mimes.$valid_mime.',';
+        }
+        
+
+         //註冊驗證
+          $validator = Validator::make(['file' => $file], [
+              'file' => 'mimes:'.$mimes.'|max:'.config('labspace-upload-api.max_size'),
+          ]);
+
+          if ($validator->fails()) {
+              throw new FileTypeInvalidException();
+          } 
+
+
+         
+          $filename =date('Ymd').date('His'). '.' .$file->getClientOriginalExtension(); 
+
+          $this->manager->saveFile($path, $filename,File::get($file));
+        TempFile::create(['filepath' => $path.$filename]);
+        return response()->json([
+            'status' => true,
+            'data'=> [
+                'filepath' => $path.$filename
+            ],
+            'success_code' => 'SUCCESS'
+        ]);
+
+    }  catch (Exception $e){
+        $response = config('error_response.server_error');
+        $response['err_detail'] = $e->getMessage();
+        return response()->json($response ,500);
+
+    }
+   
+  }
 
 
 }

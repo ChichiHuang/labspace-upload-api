@@ -5,6 +5,8 @@ Route::group(['prefix' => 'lab/api/upload','middleware' => ['cors']],function ()
 	    return 'Hello Labspace package upload api';
 	});
 
+    Route::post('/file', 'Labspace\UploadApi\Controllers\UploadController@fileUpload'); 
+
 	Route::post('/image/ckeditor', 'Labspace\UploadApi\Controllers\ImageController@ckeditor'); 
     Route::post('/image/ckeditor-json', 'Labspace\UploadApi\Controllers\ImageController@ckeditorJson'); 
     Route::post('/video/ckeditor-json', 'Labspace\UploadApi\Controllers\VideoController@ckeditorJson'); 
