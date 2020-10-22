@@ -7,6 +7,7 @@ use Labspace\UploadApi\Services\Image\ImageInterface;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Image;
+use Storage;
 
 class FileSource implements ImageInterface
 {
@@ -32,15 +33,17 @@ class FileSource implements ImageInterface
      * @return string
     */
     public function save($file_path,$show_path,$width=0)
-    {        
+    {   
+
+        $disk = Storage::disk(config('labspace-upload-api.file-system-driver')); 
         //檔案處理
         $img = Image::make($this->image->getRealPath());
         $img->resize($width, null, function ($constraint) {
             $constraint->aspectRatio();
         });
         
-
-        if($img->save($file_path)){
+        $image_normal = $img->stream();
+        if($disk->put($show_path.$this->filename, $image_normal->__toString())){
             return $show_path.$this->filename;
         } else {
             return '';
@@ -57,11 +60,10 @@ class FileSource implements ImageInterface
     public function saveThumbnail($file_path)
     {        
         //檔案處理
-        $img = Image::make($this->image->getRealPath());
+        /*$img = Image::make($this->image->getRealPath());
         $img->resize(config('labspace-upload-api.thumbnail_width'), null, function ($constraint) {
             $constraint->aspectRatio();
-        });
-        $img->save($file_path);
+        });*/
 
     }
     

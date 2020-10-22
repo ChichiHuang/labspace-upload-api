@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Input;
 use Image;
 use Exception;
 use Labspace\UploadApi\Services\Image\ImageInterface;
+use Storage;
 
 class UrlSource implements ImageInterface
 {
@@ -43,7 +44,8 @@ class UrlSource implements ImageInterface
             $constraint->aspectRatio();
         });
         //檔案處理
-        if($img->save($file_path)){
+        $image_normal = $img->stream();
+        if($disk->put($show_path.$this->filename, $image_normal->__toString())){
             return $show_path.$this->filename;
         } else {
             return '';
@@ -61,11 +63,11 @@ class UrlSource implements ImageInterface
     public function saveThumbnail($file_path)
     {        
         //檔案處理
-        $img = Image::make($this->url);
+       /* $img = Image::make($this->url);
         $img->resize(config('labspace-upload-api.thumbnail_width'), null, function ($constraint) {
             $constraint->aspectRatio();
         });
-        $img->save($file_path);
+        $img->save($file_path);*/
 
     }
 

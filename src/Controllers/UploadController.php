@@ -18,6 +18,7 @@ use Labspace\UploadApi\Requests\FileUploadRequest;
 use Labspace\UploadApi\Services\ErrorService;
 use Labspace\UploadApi\Exceptions\FileTypeInvalidException;
 use Labspace\UploadApi\Services\FileManager\AdminManager;
+use Storage;
 
 class UploadController extends Controller
 {
@@ -103,15 +104,20 @@ class UploadController extends Controller
          
           $filename =date('Ymd').date('His'). '.' .$file->getClientOriginalExtension(); 
 
-          $this->manager->saveFile($path, $filename,File::get($file));
-        TempFile::create(['filepath' => $path.$filename]);
-        return response()->json([
-            'status' => true,
-            'data'=> [
-                'filepath' => $path.$filename
-            ],
-            'success_code' => 'SUCCESS'
-        ]);
+          //$this->manager->saveFile($path, $filename,File::get($file),$file_type='file');
+
+          $disk = Storage::disk(config('labspace-upload-api.file-system-driver')); 
+
+          $disk->put($path.$filename, File::get($file));
+    
+          TempFile::create(['filepath' => $path.$filename]);
+          return response()->json([
+              'status' => true,
+              'data'=> [
+                  'filepath' => $path.$filename
+              ],
+              'success_code' => 'SUCCESS'
+          ]);
 
     }  catch (Exception $e){
         $response = config('error_response.server_error');

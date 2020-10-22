@@ -7,6 +7,7 @@ use Labspace\UploadApi\Services\Video\VideoInterface;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Log;
+use Storage;
 
 class FileSource implements VideoInterface
 {
@@ -32,8 +33,10 @@ class FileSource implements VideoInterface
      * @return string
     */
     public function save($file_path,$show_path)
-    {        
-        if($this->video->move($file_path,$this->filename)){
+    {     
+        $disk = Storage::disk(config('labspace-upload-api.file-system-driver')); 
+    
+        if( $disk->put($show_path.$this->filename, file_get_contents($this->video))){
             return $show_path.$this->filename;
         } else {
             return '';

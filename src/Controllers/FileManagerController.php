@@ -169,7 +169,7 @@ class FileManagerController extends Controller
         foreach ($valid_mime_arr as  $valid_mime) {
            $mimes= $mimes.$valid_mime.',';
         }
-        
+          $file_type='file';
 
          //註冊驗證
           $validator = Validator::make(['file' => $file], [
@@ -180,7 +180,14 @@ class FileManagerController extends Controller
               throw new FileTypeInvalidException();
           } 
 
+          //檢查非mp4才要縮圖
+          $validator = Validator::make(['file' => $file], [
+              'file' => 'mimes:jpg,jpeg,png,gif,svg',
+          ]);
 
+          if (!$validator->fails()) {
+              $file_type = 'image';
+          } 
 
           $folder = 'manager/'.$path.$request->get('path').'/';
 
@@ -190,14 +197,15 @@ class FileManagerController extends Controller
           $filename =str_replace(")","]", $filename);
           $filename =clean_file_name($filename);
 
-          $this->manager->saveFile($folder, $filename,File::get($file));
-          //檢查縮圖資料夾
-          $this->manager->checkIfFolderExist($folder.'thumbs/');
+
+
+          $this->manager->saveFile($folder, $filename,$file,$file_type);
+
           //縮圖
-          $file_path = 'app/public/'.$folder.'thumbs/'.$filename ;
+          //$file_path = 'app/public/'.$folder.'thumbs/'.$filename ;
 
           //檢查非mp4才要縮圖
-          $validator = Validator::make(['file' => $file], [
+          /*$validator = Validator::make(['file' => $file], [
               'file' => 'mimes:jpg,jpeg,png,gif,svg',
           ]);
 
@@ -208,7 +216,7 @@ class FileManagerController extends Controller
                   $constraint->aspectRatio();
               });
               $img->save(storage_path($file_path));
-          } 
+          } */
 
            
     }  catch (Exception $e){

@@ -6,16 +6,20 @@ use Dflydev\ApacheMimeTypes\PhpRepository;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 use Log;
+use Image;
 
 class AdminManager
 {
   protected $disk;
   protected $mimeDetect;
+  protected $thumb_folders = ['thumbs','thumbs_s','thumbs_m','thumbs_b'];
+  protected $thumb_sizes = [];
 
   public function __construct(PhpRepository $mimeDetect)
   {
-    $this->disk = Storage::disk('file-manager');
+    $this->disk = Storage::disk(config('labspace-upload-api.file-system-driver'));
     $this->mimeDetect = $mimeDetect;
+    $this->thumb_sizes = config('labspace-upload-api.thumbnail_sizes');
   }
 
   /**
@@ -43,7 +47,7 @@ class AdminManager
     $Folders = [];
     foreach (array_unique($this->disk->directories($folder)) as $subfolder) {
       $res_folder = ltrim(substr($subfolder, strrpos($subfolder, '/')),'/');
-      if($res_folder != 'thumbs'){
+      if(!in_array($res_folder,$this->thumb_folders )){
         array_push($Folders,[
             'path' => str_replace($folder_prefix,"",$subfolder).'/',
             'name' => $res_folder
@@ -55,6 +59,9 @@ class AdminManager
 
     $Files = [];
     $this->checkIfFolderExist($folder.'/thumbs');
+    foreach ($this->thumb_sizes as $thumb_code =>  $thumb_size) {
+         $this->checkIfFolderExist($folder.'/thumbs_'.$thumb_code);
+    }
 
     foreach ($this->disk->files($folder) as $filepath) {
       $mimeType = $this->fileMimeType($filepath);
@@ -234,6 +241,9 @@ class AdminManager
     //刪除原檔
     $origin_path  = str_replace($filename,'',$path );
     $this->disk->delete($origin_path.'thumbs/'.$filename);
+    foreach ($this->thumb_sizes as $thumb_code =>  $thumb_size) {
+          $this->disk->delete($origin_path.'thumbs/'.$thumb_code.'/'.$filename);
+    }
 
     return $this->disk->delete($path);
   }
@@ -253,17 +263,42 @@ class AdminManager
   /**
    * Save a file
    */
-  public function saveFile($path,$filename, $content)
+  public function saveFile($folder,$filename, $file,$type='file')
   {
-    try{
-      $path = $this->cleanFolder($path);
-      $folder  = $path.'/'.$filename;
-      //Log::error('Upload Info: '.$folder);
-      return $this->disk->put($folder, $content);
-    } catch (Exception $e){
-      return false;
-        
-    }
+
+      $path = $this->cleanFolder($folder);
+      //$folder  = $path.'/'.$filename;
+      
+      //原檔案
+      $this->disk->put($folder.$filename, file_get_contents($file));
+
+      if($type == 'image' || $type == 'admin-file-manager'){
+        $thumb_folder =  $folder.'/thumbs/';
+        $this->checkIfFolderExist($thumb_folder);
+        //圖片需要基本縮圖
+        $image_normal = Image::make($file)->resize(200, null, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+       
+        $image_normal = $image_normal->stream();
+       
+        $this->disk->put($thumb_folder.$filename, $image_normal->__toString());
+
+        foreach ($this->thumb_sizes as $thumb_code =>  $thumb_size) {
+            $thumb_folder =  $folder.'/thumbs_'.$thumb_code.'/';
+            $this->checkIfFolderExist($thumb_folder);
+            //圖片需要基本縮圖
+            $image_normal = Image::make($file)->resize($thumb_size, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+           
+            $image_normal = $image_normal->stream();
+            $this->disk->put($thumb_folder.$filename, $image_normal->__toString());
+        }
+
+
+      }
+
   }
 
 }

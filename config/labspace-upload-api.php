@@ -25,6 +25,12 @@ return [
     ], //開放的檔案上傳的檔案類型(逗號隔開)
 
     'thumbnail_width' => 200,
+    'thumbnail_sizes' => [
+        'b' => 1200,
+        'm' => 800,
+        's' => 600
+    ],
+    'file-system-driver' =>env('FILESYSTEM_DRIVER','file-manager'),
     //圖片影片
     'valid_mime'   => [
         'jpg',
@@ -48,7 +54,7 @@ return [
         'xls',
         'xlsx',
         'txt',
-        'zip'
+        'zip',
 
     ],
 

@@ -56,6 +56,7 @@ class ImageController extends Controller
     //一般檔案上傳
     public function fileSource(ImageFileRequest $request)
     {
+       
         try{
            $user_id = TokenService::getUserId($request);
             $path = '/'.$request->type.'/'.$user_id.'/';
