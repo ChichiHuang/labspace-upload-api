@@ -1,4 +1,4 @@
- <?php
+<?php
 
 Route::group(['prefix' => 'lab/api/upload','middleware' => ['cors']],function (){
 	Route::get('labspace', function(){
