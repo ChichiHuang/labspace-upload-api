@@ -20,7 +20,7 @@ class FileSource implements VideoInterface
         $this->video = Input::file($request_name);
         //取得檔案
         if(!$filename){
-            $this->filename = date('YmdHis').date('His'). '.' .$this->video->getClientOriginalExtension(); 
+            $this->filename = date('YmdHis').date('His').get_millisecond(). '.' .$this->video->getClientOriginalExtension(); 
         } else {
             $this->filename = $filename;
         }

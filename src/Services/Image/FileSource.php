@@ -19,7 +19,7 @@ class FileSource implements ImageInterface
         $this->image = Input::file($request_name);
         //取得檔案
         if(!$filename){
-            $this->filename = date('Ymd').date('His'). '.' .$this->image->getClientOriginalExtension(); 
+            $this->filename = date('Ymd').date('His').get_millisecond(). '.' .$this->image->getClientOriginalExtension(); 
         } else {
             $this->filename = $filename;
         }

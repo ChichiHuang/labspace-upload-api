@@ -18,7 +18,7 @@ class Base64Source implements ImageInterface
         $this->request = $request;
         //取得檔案
         if(!$filename){
-            $this->filename = date('Ymd').date('His'). '.' .$request->extension; 
+            $this->filename = date('Ymd').date('His').get_millisecond(). '.' .$request->extension; 
         } else {
             $this->filename = $filename;
         }
