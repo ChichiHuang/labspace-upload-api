@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Input;
 use Image;
 use Exception;
 use Labspace\UploadApi\Services\Image\ImageInterface;
-use Storage;
 
 class UrlSource implements ImageInterface
 {
