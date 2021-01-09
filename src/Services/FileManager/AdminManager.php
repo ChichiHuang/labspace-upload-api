@@ -276,7 +276,7 @@ class AdminManager
         $thumb_folder =  $folder.'/thumbs/';
         $this->checkIfFolderExist($thumb_folder);
         //圖片需要基本縮圖
-        $image_normal = Image::make($file)->resize(200, null, function ($constraint) {
+        $image_normal = Image::make($file)->resize(config('labspace-upload-api.thumbnail_width'), null, function ($constraint) {
             $constraint->aspectRatio();
         });
        
