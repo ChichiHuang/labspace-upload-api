@@ -1,9 +1,7 @@
 <?php
 
 Route::group(['prefix' => 'lab/api/upload','middleware' => ['cors']],function (){
-	Route::get('labspace', function(){
-	    return 'Hello Labspace package upload api';
-	});
+
 
     Route::post('/file', 'Labspace\UploadApi\Controllers\UploadController@fileUpload'); 
 
